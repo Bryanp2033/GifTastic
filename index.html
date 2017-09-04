@@ -4,9 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <title>GifTastic</title>
 </head>
 <body>
-    
+
+    <div class="header">
+        <h1 class="header-title">GifTastic</h1>
+        <p>Search any video game of your choosing to see their corresponding gifs!</p>
+    </div>
+    <div class="game-list"></div>
+    <input type="text" id="search-bar" placeholder="search for a game">
+    <button type="submit" for="search-bar" class="search-button">Search</button>
+    <button id="remove">Remove</button>
+    <button id="clear">Clear All</button>
+    <script>
+
+        $(document).ready(function(){
+
+            var videoGames = ["Super Mario", "Legend of Zelda", "Runescape", "Metroid", "World of Warcraft", "League of Legends"]
+
+            function gamelist(){
+
+                for(i = 0; i < videoGames.length; i++){
+                    var list = $("<button>")
+                    list.addClass("games");
+                    list.text(videoGames[i])
+                    $(".game-list").append(list);
+                }
+            }
+            gamelist();
+
+            function removeList(){
+                $(".game-list").empty();
+            }
+
+            $(".search-button").on("click", function(event){
+
+                removeList();
+
+                event.preventDefault();
+
+                var game = $("#search-bar").val();
+                videoGames.push(game);
+
+                gamelist();
+                $("#search-bar").val("");
+            });
+
+
+            $("#remove").on("click", function(){
+                videoGames.pop();
+                removeList();
+                gamelist();                
+            })
+
+            $("#clear").on("click", function(){
+                removeList();
+            })
+
+        });
+    </script>
 </body>
 </html>
