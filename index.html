@@ -14,30 +14,68 @@
         <p>Search any video game of your choosing to see their corresponding gifs!</p>
     </div>
     <div class="game-list"></div>
-    <input type="text" id="search-bar" placeholder="search for a game">
-    <button type="submit" for="search-bar" class="search-button">Search</button>
-    <button id="remove">Remove</button>
-    <button id="clear">Clear All</button>
+
+    <div class="search-header">
+        <input type="text" id="search-bar" placeholder="search for a game">
+        <button type="submit" for="search-bar" class="search-button">Add</button>
+        <button id="remove">Remove A Game</button>
+        <button id="clear">Clear All Gifs</button>
+    </div>
+
+    <div class="results"></div>
     <script>
 
         $(document).ready(function(){
 
             var videoGames = ["Super Mario", "Legend of Zelda", "Runescape", "Metroid", "World of Warcraft", "League of Legends"]
 
-            function gamelist(){
-
-                for(i = 0; i < videoGames.length; i++){
-                    var list = $("<button>")
-                    list.addClass("games");
-                    list.text(videoGames[i])
-                    $(".game-list").append(list);
-                }
-            }
-            gamelist();
-
             function removeList(){
                 $(".game-list").empty();
             }
+
+
+            function gamelist(){
+
+                removeList();
+
+                for(i = 0; i < videoGames.length; i++){
+                    var list = $("<button>")
+                    list.addClass("game-button");
+                    list.attr("data-name", videoGames[i])
+                    list.text(videoGames[i])
+                    $(".game-list").append(list);
+                }
+
+            }
+
+            function displayGames(){
+
+                var selectedGame = $(this).attr("data-name");
+                console.log(selectedGame);
+
+                var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+                selectedGame + "&api_key=2e98084fedf14507a3cef6efe3a5edf0&limit=15";
+
+                $.ajax({
+                    url: queryURL,
+                    method: "GET",
+                }).done(function(result){
+                    console.log(result);
+                    var data = result.data;
+                    $(".results").empty();
+                    for(i = 0; i < data.length; i++ ){
+                        img = $("<img>");
+                        img.attr("src", data[i].images.fixed_height.url);
+                        rating = $("<div>");
+                        rating.addClass("gif-rating");
+                        rating.html("Rating: " + data[i].rating);
+                        $(".results").append(img,rating);
+                    }
+                   
+                })
+            }
+            gamelist();
+
 
             $(".search-button").on("click", function(event){
 
@@ -46,11 +84,61 @@
                 event.preventDefault();
 
                 var game = $("#search-bar").val();
-                videoGames.push(game);
 
-                gamelist();
+                videoGames.push(game);
                 $("#search-bar").val("");
+
+                
+                var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+                game + "&api_key=2e98084fedf14507a3cef6efe3a5edf0&limit=15";
+              
+                $.ajax({
+                    url: queryURL,
+                    method: "GET",
+                }).done(function(result){
+                    console.log(result);
+                    var data = result.data;
+                    $(".results").empty();
+                    for(i = 0; i < data.length; i++ ){
+                        img = $("<img>");
+                        img.attr("src", data[i].images.fixed_height.url);
+                        rating = $("<div>");
+                        rating.addClass("gif-rating");
+                        rating.html("Rating: " + data[i].rating);
+                        $(".results").append(img,rating);
+                    }
+                   
+                })
+                gamelist();
+
             });
+
+            function gifs(){
+                
+                var game = $("#search-bar").val();
+                var selectedGame = $(this).attr("data-name");
+                var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+                selectedGame||game + "&api_key=2e98084fedf14507a3cef6efe3a5edf0&limit=15";
+
+                $.ajax({
+                    url: queryURL,
+                    method: "GET",
+                }).done(function(result){
+                    console.log(result);
+                    var data = result.data;
+                    $(".results").empty();
+                    for(i = 0; i < data.length; i++ ){
+                        img = $("<img>");
+                        img.attr("src", data[i].images.fixed_height.url);
+                        rating = $("<div>");
+                        rating.addClass("gif-rating");
+                        rating.html("Rating: " + data[i].rating);
+                        $(".results").append(img,rating);
+                    }
+                   
+                })
+            }
+
 
 
             $("#remove").on("click", function(){
@@ -60,10 +148,12 @@
             })
 
             $("#clear").on("click", function(){
-                removeList();
+                $(".results").empty();
             })
 
+            $(document).on("click", ".game-button", displayGames);
         });
+        
     </script>
 </body>
 </html>
