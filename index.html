@@ -1,179 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="assets/javascript/app.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <title>GifTastic</title>
+    
 </head>
 <body>
 
     <div class="header">
         <h1 class="header-title">GifTastic</h1>
-        <p>Search any video game of your choosing to see their corresponding gifs!</p>
+    </div>
+    <div class="details">
+    <p>Search any video game of your choosing to see their corresponding gifs!</p>
+    </div>
+
+    <div class="search-header">
+        <h3>Search your game</h3>
+        <input type="text" id="search-bar" placeholder="search for a game">
+        <br>
+        <button type="submit" for="search-bar" class="search-button">Add</button>
+        <br>
+        <button id="remove">Remove Latest Entry</button>
+        <br>
+        <button id="clear">Clear All Gifs</button>
     </div>
     <div class="game-list"></div>
 
-    <div class="search-header">
-        <input type="text" id="search-bar" placeholder="search for a game">
-        <button type="submit" for="search-bar" class="search-button">Add</button>
-        <button id="remove">Remove A Game</button>
-        <button id="clear">Clear All Gifs</button>
-    </div>
-
     <div class="results"></div>
-    <script>
-
-        $(document).ready(function(){
-
-            var videoGames = ["Super Mario", "Legend of Zelda", "Runescape", "Metroid", "World of Warcraft", "League of Legends"]
-
-            function removeList(){
-                $(".game-list").empty();
-            }
-
-
-            function gamelist(){
-
-                removeList();
-
-                for(i = 0; i < videoGames.length; i++){
-                    var list = $("<button>")
-                    list.addClass("game-button");
-                    list.attr("data-name", videoGames[i])
-                    list.text(videoGames[i])
-                    $(".game-list").append(list);
-                }
-
-            }
-            // function animate(){
-            //     var url = $(this).data("animate");
-            //     console.log('hi')
-            //     $(this).attr("src",url);
-            //     $(this).data("state", "animate");
-            // }
-
-            // function stay(){
-            //     console.log('bye')
-            //     var url = $(this).data("stay");
-            //     $(this).attr("src",url);
-            //     $(this).data("state", "stay");
-            // }
-
-            function displayGames(){
-
-                var selectedGame = $(this).attr("data-name");
-                console.log(selectedGame);
-
-                var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-                selectedGame + "&api_key=2e98084fedf14507a3cef6efe3a5edf0&limit=15";
-
-                $.ajax({
-                    url: queryURL,
-                    method: "GET",
-                }).done(function(result){
-                    console.log(result);
-                    var data = result.data;
-                    $(".results").empty();
-                    for(i = 0; i < data.length; i++ ){
-                        img = $("<img>");
-                        img.addClass("gif")
-                        img.attr("src", data[i].images.fixed_height_still.url)
-                        img.data("still", data[i].images.fixed_height_still.url)
-                           .data("animate",data[i].images.fixed_height.url)
-                           .data("state", "still")
-                           .data("state", "animate")
-                        img.on("mouseenter", function(){
-                            var url = $(this).data("animate");
-                            $(this).attr("src", url);
-                            $(this).data("state", "animate");
-                        });
-                        img.on("mouseleave", function(){
-                            var stayurl = $(this).data("still");
-                            $(this).attr("src", stayurl);
-                            $(this).data("state", "still");
-                        })
-                        rating = $("<div>");
-                        rating.addClass("gif-rating");
-                        rating.html("Rating: " + data[i].rating);
-                        $(".results").append(img,rating);
-
-                    }
-                   
-                })
-            }
-
-            gamelist();
-
-
-
-            $(".search-button").on("click", function(event){
-
-                removeList();
-
-                event.preventDefault();
-
-                var game = $("#search-bar").val();
-
-                videoGames.push(game);
-                $("#search-bar").val("");
-
-                
-                var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-                game + "&api_key=2e98084fedf14507a3cef6efe3a5edf0&limit=15";
-              
-                $.ajax({
-                    url: queryURL,
-                    method: "GET",
-                }).done(function(result){
-                    console.log(result);
-                    var data = result.data;
-                    $(".results").empty();
-                    for(i = 0; i < data.length; i++ ){
-                        img = $("<img>");
-                        img.addClass("gif")
-                        img.attr("src", data[i].images.fixed_height_still.url)
-                        img.data("still", data[i].images.fixed_height_still.url)
-                           .data("animate",data[i].images.fixed_height.url)
-                           .data("state", "still")
-                           .data("state", "animate")
-                        img.on("mouseenter", function(){
-                            var url = $(this).data("animate");
-                            $(this).attr("src", url);
-                            $(this).data("state", "animate");
-                        });
-                        img.on("mouseleave", function(){
-                            var stayurl = $(this).data("still");
-                            $(this).attr("src", stayurl);
-                            $(this).data("state", "still");
-                        })
-                        rating = $("<div>");
-                        rating.addClass("gif-rating");
-                        rating.html("Rating: " + data[i].rating);
-                        $(".results").append(img,rating);
-                    }
-                   
-                })
-                gamelist();
-
-            });
-
-
-
-            $("#remove").on("click", function(){
-                videoGames.pop();
-                removeList();
-                gamelist();                
-            })
-
-            $("#clear").on("click", function(){
-                $(".results").empty();
-            })
-
-            $(document).on("click", ".game-button", displayGames);
-        });
-        
-    </script>
 </body>
 </html>

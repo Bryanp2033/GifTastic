@@ -1,0 +1,92 @@
+body{
+    background-color: lightgrey;
+    margin: 0px;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.header{
+    background-color: black;
+    color: white;
+    padding: 1px;
+    border-bottom: 5px solid lightgreen;
+}
+
+.header-title{
+    margin: 25px;
+    text-align: center;
+    font-size: 65px;
+}
+
+.details{
+    background-color: green;
+    padding: 15px;
+    text-align: center;
+}
+
+.game-button{
+    color:black;
+    font-family: 'Press Start 2P', cursive;
+    padding: 10px;
+    margin: 20px;;
+}
+
+.search-header{
+    float: right;
+    color: white;
+    background-color: black;
+    padding: 30px;
+    border:  10px solid white;
+    height: 435px;
+}
+
+h3{
+    text-align: center;
+}
+
+#search-bar{
+    font-size: 25px;
+    border: none;
+    border-radius: 5px; 
+    margin-left: 25px;
+    padding: 10px;
+}
+
+button{
+    margin: 10px;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background: #1DA1F2;
+    font-size: 15px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.search-button{
+    margin-left: 125px;
+}
+
+#remove{
+    margin-left: 70px;
+}
+
+#clear{
+    margin-left: 100px;
+}
+
+.results{
+    float: left;
+    margin: 25px;
+    margin-left: 250px;
+    background-color: white;
+    padding: 10px;
+    width: auto;
+    border: 1px solid black;
+    border-radius: 8px;
+    text-align: center;
+}
+
+img{
+    padding: 25px;
+    
+}
